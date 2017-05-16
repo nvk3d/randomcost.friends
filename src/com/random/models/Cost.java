@@ -12,6 +12,9 @@ public class Cost {
     private int[] prices;
     private int startMonth;
     private Day[] days;
+    private int totalSum = 0;
+    private int totalClients = 0;
+    private int totalVisits = 0;
 
     public Cost(int[] needleDays, int startMonth) {
         this.needleDays = needleDays;
@@ -94,13 +97,9 @@ public class Cost {
         }
     }
 
-    public int getTotalCost(boolean print) {
-        int sum = 0;
-        for (int i = 0; i < this.totalCost.length; i++) {
-            sum += this.totalCost[i];
-        }
-        if (print) System.out.println("Общий доход: " + sum + " руб.");
-        return sum;
+    public void getTotal() {
+        System.out.println("Общий итог: " + this.totalClients + " клиентов, "
+                + this.totalVisits + " посещений, " + this.totalSum + " руб.");
     }
 
     /**
@@ -131,6 +130,10 @@ public class Cost {
                     // Заполняем поля дней
                     this.days[j + index].cost += this.prices[val];
                     this.days[j + index].clients += val;
+
+                    // Общее кол-во клиентов и стоимость
+                    this.totalSum += this.prices[val];
+                    this.totalClients += this.days[j + index].clients;
                 }
 
                 //  Инициализация
@@ -139,6 +142,9 @@ public class Cost {
                 this.days[j + index].date = j + 1;
                 this.days[j + index].month = this.getMonthByInt(
                         (this.startMonth + i) > 12 ? (this.startMonth + i) % 12 : this.startMonth + i);
+
+                // Общее кол-во посещений
+                this.totalVisits += this.days[j + index].visits;
             }
             this.totalCost[i] = sum;
         }
