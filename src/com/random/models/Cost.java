@@ -134,7 +134,7 @@ public class Cost {
                 }
 
                 //  Инициализация
-                this.days[i].clients = this.days[i].visits == 0 ? 0 : this.days[i].clients;
+                this.days[j + index].clients = visit == 0 ? 0 : this.days[j + index].clients;
                 this.days[j + index].visits = visit;
                 this.days[j + index].date = j + 1;
                 this.days[j + index].month = this.getMonthByInt(
