@@ -27,6 +27,7 @@ public class Cost {
      */
     public int[] countUpTotalCost(boolean print) {
         this.initPrices();
+        this.clients.initVisits();
         this.pushTotalCost();
 
         if (!print) return this.totalCost;
@@ -60,6 +61,7 @@ public class Cost {
             }
             System.out.print("" + this.days[i].date+" " + this.days[i].month
                     + ", клиентов: " + this.days[i].clients
+                    + ", квестов: " + this.days[i].visits
                     + ", доход: " + this.days[i].cost + " руб.");
             if (i == this.days.length - 1) {
                 System.out.println("\nИтого: " + this.totalCost[k] + " руб.");
@@ -76,17 +78,29 @@ public class Cost {
      */
     public void initPrices() {
         Scanner sc = new Scanner(System.in);
-        if (this.clients == null) { this.clients = new Clients(); this.clients.initClients(); }
+        if (this.clients == null) {
+            this.clients = new Clients();
+            this.clients.initClients();
+        }
 
         this.prices = new int[clients.getMaxHumans() + 1];
         int client = clients.getMinHumans();
 
         for (int i = 0; i <= clients.getMaxHumans(); i++) {
-            System.out.print("Пожалуйста, введите стоимость за " + client + " " + this.getRightHuman(client) + ": ");
+            System.out.print("Пожалуйста, введите стоимость за "
+                    + client + " " + this.getRightHuman(client) + ": ");
             prices[i] = sc.nextInt();
             client++;
         }
-        System.out.println();
+    }
+
+    public int getTotalCost(boolean print) {
+        int sum = 0;
+        for (int i = 0; i < this.totalCost.length; i++) {
+            sum += this.totalCost[i];
+        }
+        if (print) System.out.println("Общий доход: " + sum + " руб.");
+        return sum;
     }
 
     /**
@@ -95,20 +109,36 @@ public class Cost {
      */
     private void pushTotalCost() {
         int index = 0;
+
         for (int i = 0; i < this.needleDays.length; i++) {
             int sum = 0;
+
             // Берем случайных клиентов и считаем доход за день
+            // Количество посещений также случайное
             for (int j = 0; j < this.needleDays[i]; j++) {
+
                 // Передвигаем указатель на месяц вперед
                 if (j == 0 && i != 0) index += this.needleDays[i - 1];
-                // Случайный клиент
-                int val = clients.getRandomClients();
-                sum += this.prices[val];
-                // Заполняем поля дней
-                this.days[j + index].cost = this.prices[val];
-                this.days[j + index].clients = val;
+
+                // Случайный клиент и случайное кол-во посещений
+                int val, visit = clients.getRandomVisits();
+
+                // Подсчет клиентов за visit посещений
+                for (int k = 0; k < visit; k++) {
+                    while ((val = clients.getRandomClients()) == 0);
+                    sum += this.prices[val];
+
+                    // Заполняем поля дней
+                    this.days[j + index].cost += this.prices[val];
+                    this.days[j + index].clients += val;
+                }
+
+                //  Инициализация
+                this.days[i].clients = this.days[i].visits == 0 ? 0 : this.days[i].clients;
+                this.days[j + index].visits = visit;
                 this.days[j + index].date = j + 1;
-                this.days[j + index].month = this.getMonthByInt(this.startMonth + i);
+                this.days[j + index].month = this.getMonthByInt(
+                        (this.startMonth + i) > 12 ? (this.startMonth + i) % 12 : this.startMonth + i);
             }
             this.totalCost[i] = sum;
         }
@@ -123,6 +153,9 @@ public class Cost {
         return "";
     }
 
+    /**
+     * Инициализация дней
+     */
     private void writeDays() {
         // Иницализация дней
         int sum = 0;

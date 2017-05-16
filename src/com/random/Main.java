@@ -32,6 +32,7 @@ public class Main {
         Cost cost = new Cost(this.needleDays, params[2]);
         cost.countUpTotalCost(false);
         cost.getDaysInfo(true);
+        cost.getTotalCost(true);
     }
 
     private int[] initParams() {

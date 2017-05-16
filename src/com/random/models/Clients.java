@@ -10,13 +10,17 @@ import java.util.Scanner;
 public class Clients {
     private int minHumans = 0;
     private int maxHumans = 0;
+    private int minVisits = 0;
+    private int maxVisits = 0;
 
     public Clients() {
     }
 
-    public Clients(int minHumans, int maxHumans) {
+    public Clients(int minHumans, int maxHumans, int minVisits, int maxVisits) {
         this.minHumans = minHumans;
         this.maxHumans = maxHumans;
+        this.minVisits = minVisits;
+        this.maxVisits = maxVisits;
     }
 
     /**
@@ -31,6 +35,17 @@ public class Clients {
     }
 
     /**
+     * Возвращает случайное число
+     * посещений
+     *
+     * @return countClients
+     */
+    public int getRandomVisits() {
+        Random rand = new Random();
+        return rand.nextInt(this.maxVisits - this.minVisits + 1) + this.minVisits;
+    }
+
+    /**
      * Инициализация клиентов (пользовательская)
      */
     public void initClients() {
@@ -41,12 +56,32 @@ public class Clients {
         this.maxHumans = sc.nextInt();
     }
 
+    /**
+     * Инициализация посещений (пользовательская)
+     */
+    public void initVisits() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Пожалуйста, введите наименьшее число посещений (включая 0): ");
+        this.minVisits = sc.nextInt();
+        System.out.print("Пожалуйста, введите наибольшее число посещений (включая 0): ");
+        this.maxVisits = sc.nextInt();
+        System.out.println();
+    }
+
     public int getMinHumans() {
         return this.minHumans;
     }
 
     public int getMaxHumans() {
         return this.maxHumans;
+    }
+
+    public int getMinVisits() {
+        return this.minVisits;
+    }
+
+    public int getMaxVisits() {
+        return this.maxVisits;
     }
 
 }

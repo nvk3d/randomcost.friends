@@ -7,5 +7,6 @@ public class Day {
     public int cost = 0;
     public int clients = 0;
     public int date = 0;
+    public int visits = 0;
     public String month = "";
 }
