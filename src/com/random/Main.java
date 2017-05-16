@@ -31,8 +31,7 @@ public class Main {
         this.needleDays = calendar.getNeedleDays();
         Cost cost = new Cost(this.needleDays, params[2]);
         cost.countUpTotalCost(false);
-        Day[] days = cost.getDaysInfo(true);
-        System.out.println(days.length);
+        cost.getDaysInfo(true);
     }
 
     private int[] initParams() {

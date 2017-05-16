@@ -48,22 +48,26 @@ public class Cost {
     public Day[] getDaysInfo(boolean print) {
         if (!print) return this.days;
 
+        int k = 0;  // для итого
         for (int i = 0; i < this.days.length; i++) {
-            System.out.println(this.days[i].date+" "+this.days[i].month+" ");
-        }
-        return this.days;
-
-        /*for (int i = 0; i < this.days.length; i++) {
+            if (i > 0 && this.days[i].date < this.days[i-1].date) {
+                System.out.println("Итого: " + this.totalCost[k] + " руб.");
+                System.out.println();
+                k++;
+            }
             if (i == 0 || (i > 0 && this.days[i].date < this.days[i-1].date)) {
                 System.out.println(this.getMonthByString(this.days[i].month));
             }
-            if (i != 0 && i % 7 == 0) System.out.println();
-            System.out.print("|="+this.days[i].date+" " +this.days[i].month
-                    +", клиентов: "+this.days[i].clients
-                    +", доход: "+this.days[i].cost+" руб.");
+            System.out.print("" + this.days[i].date+" " + this.days[i].month
+                    + ", клиентов: " + this.days[i].clients
+                    + ", доход: " + this.days[i].cost + " руб.");
+            if (i == this.days.length - 1) {
+                System.out.println("\nИтого: " + this.totalCost[k] + " руб.");
+            }
+            System.out.println();
         }
 
-        return this.days;*/
+        return this.days;
     }
 
     /**
@@ -125,9 +129,11 @@ public class Cost {
         for (int i = 0; i < this.needleDays.length; i++) sum += this.needleDays[i];
         this.days = new Day[sum];
 
+        int index = 0;
         for (int i = 0; i < this.needleDays.length; i++) {
             for (int j = 0; j < this.needleDays[i]; j++) {
-                this.days[j] = new Day();
+                if (j == 0 && i != 0) index += this.needleDays[i - 1];
+                this.days[j + index] = new Day();
             }
         }
     }
